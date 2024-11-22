@@ -3,20 +3,21 @@
     <header>
       <h1>Docker Management</h1>
       <nav>
-        <button @click="setPage('home')">Home</button>
-        <button @click="setPage('create')">Create New Container</button>
+        <button @click="setPage('HomePage')">Home</button>
+        <button @click="setPage('CreateContainerPage')">Create New Container</button>
       </nav>
     </header>
     <main>
-      <!-- Динамическое отображение компонентов -->
-      <HomePage v-if="currentPage === 'home'" />
-      <CreateContainerPage v-if="currentPage === 'create'" />
+      <!-- Динамическое отображение компонентов с анимацией -->
+      <transition name="fade" mode="out-in">
+        <component :is="currentPage" />
+      </transition>
     </main>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import {ref} from "vue";
 import HomePage from "./components/Main.vue";
 import CreateContainerPage from "./components/CreateContainer.vue";
 
@@ -26,8 +27,10 @@ export default {
     CreateContainerPage,
   },
   setup() {
-    const currentPage = ref("home");
+    // Текущее состояние страницы
+    const currentPage = ref("HomePage"); // Указываем имя компонента
 
+    // Функция для смены страницы
     const setPage = (page) => {
       currentPage.value = page;
     };
@@ -41,6 +44,7 @@ export default {
 </script>
 
 <style scoped>
+/* Стили для Header */
 header {
   display: flex;
   justify-content: space-between;
@@ -69,7 +73,19 @@ nav button:hover {
   background: #45a049;
 }
 
+/* Стили для Main */
 main {
   padding: 20px;
+}
+
+/* Анимация переходов */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
