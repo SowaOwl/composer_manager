@@ -24,3 +24,7 @@ func (a *App) Startup(ctx context.Context) {
 func (a *App) GetAllTypes() []model.PublicType {
 	return a.ComposeService.GetAllTypes()
 }
+
+func (a *App) GetAllContainers() []model.Container {
+	return a.ComposeService.GetAllContainers()
+}

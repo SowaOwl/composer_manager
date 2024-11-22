@@ -18,31 +18,27 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import {onMounted, ref} from "vue";
+import {GetAllContainers} from "../../wailsjs/go/backend/App.js";
 
 export default {
   name: "DockerContainers",
   setup() {
-    const containers = ref([
-      {
-        id: 1,
-        name: "Web Server",
-        description: "Nginx container serving the website",
-        status: "running",
-      },
-      {
-        id: 2,
-        name: "Database",
-        description: "MySQL database for the application",
-        status: "stopped",
-      },
-      {
-        id: 3,
-        name: "Redis Cache",
-        description: "Redis cache for optimizing queries",
-        status: "running",
-      },
-    ]);
+    const containers = ref([]);
+
+    const fetchContainers = async () => {
+      try {
+        const response = await GetAllContainers();
+        containers.value = response.map((container) => ({
+          id: container.ID,
+          name: container.Name,
+          body: "Test",
+          status: "stopped",
+        }))
+      } catch (error) {
+        console.error("Error with fetch containers: ", error)
+      }
+    }
 
     const toggleContainer = (container) => {
       container.status = container.status === "running" ? "stopped" : "running";
@@ -51,6 +47,10 @@ export default {
     const editContainer = (container) => {
       alert(`Edit functionality for ${container.name}`);
     };
+
+    onMounted(() => {
+      fetchContainers()
+    })
 
     return {
       containers,

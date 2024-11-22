@@ -9,6 +9,7 @@ import (
 
 type Service interface {
 	GetAllTypes() []model.PublicType
+	GetAllContainers() []model.Container
 	GenerateDockerCompose() error
 }
 
@@ -24,6 +25,10 @@ func NewGormCompose(repo Repository) *ComposeService {
 
 func (c ComposeService) GetAllTypes() []model.PublicType {
 	return c.repo.GetTypes()
+}
+
+func (c ComposeService) GetAllContainers() []model.Container {
+	return c.repo.GetContainers()
 }
 
 func (c ComposeService) GenerateDockerCompose() error {
