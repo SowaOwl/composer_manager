@@ -35,3 +35,10 @@ func (a *App) GenerateDockerCompose() {
 		panic(err)
 	}
 }
+
+func (a *App) CreateContainer(request compose.CreateContainerRequest) {
+	err := a.ComposeController.CreateContainer(request)
+	if err != nil {
+		panic(err)
+	}
+}

@@ -8,6 +8,8 @@ type Controller interface {
 	GetContainerByID(id int) *model.Container
 	GetTypeByID(id int) *model.PublicType
 	GetNetworkByID(id int) *model.Network
+	UpdateContainer(request UpdateContainerRequest) error
+	CreateContainer(request CreateContainerRequest) error
 	GenerateDockerCompose() error
 }
 
@@ -41,6 +43,10 @@ func (c *ControllerImpl) GetTypeByID(id int64) *model.PublicType {
 
 func (c *ControllerImpl) GetNetworkByID(id int64) *model.Network {
 	return c.repo.GetNetworkByID(id)
+}
+
+func (c *ControllerImpl) CreateContainer(request CreateContainerRequest) error {
+	return c.service.CreateContainer(request)
 }
 
 func (c *ControllerImpl) GenerateDockerCompose() error {

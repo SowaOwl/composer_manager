@@ -1,7 +1,13 @@
 package compose
 
+import (
+	"composer_vue/backend/app/model"
+	"composer_vue/backend/util/debug"
+)
+
 type Service interface {
 	GenerateDockerCompose() error
+	CreateContainer(request CreateContainerRequest) error
 }
 
 type ComposeService struct {
@@ -22,6 +28,33 @@ func (c ComposeService) GenerateDockerCompose() error {
 	err := generateComposeFile(containers, types, networks)
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (c ComposeService) CreateContainer(request CreateContainerRequest) error {
+	container := model.Container{
+		Name: request.Name,
+		Body: request.Body,
+	}
+
+	result, err := c.repo.CreateContainer(&container)
+	if err != nil {
+		return err
+	}
+
+	debug.JsonPrint(request.PublicTypes)
+
+	for _, data := range request.PublicTypes {
+		_, err := c.repo.CreatePublicData(&model.PublicData{
+			ContainerID:  result.ID,
+			PublicTypeID: data.TypeID,
+			Data:         data.Data,
+		})
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

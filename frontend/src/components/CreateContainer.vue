@@ -32,8 +32,8 @@
 
           <select v-model="selectedTag">
             <option disabled value="">Select a tag</option>
-            <option v-for="(tag, index) in availableTags" :key="index" :value="tag">
-              {{ tag }}
+            <option v-for="tag in availableTags" :key="tag.id" :value="tag.id">
+              {{ tag.name }}
             </option>
           </select>
           <input
@@ -73,7 +73,7 @@
 
 <script>
 import {onMounted, ref} from "vue";
-import {GetAllTypes} from "../../wailsjs/go/backend/App.js";
+import {GetAllTypes, CreateContainer} from "../../wailsjs/go/backend/App.js";
 
 export default {
   name: "CreateContainer",
@@ -94,10 +94,17 @@ export default {
         alert("Please enter text and select a tag.");
         return;
       }
+
+      const selectedTagName = availableTags.value.find(
+          (tag) => tag.id === parseInt(selectedTag.value)
+      )?.name;
+
       container.value.textWithTags.push({
         text: newText.value,
-        tag: selectedTag.value,
+        tag: selectedTagName,
+        tagId: selectedTag.value,
       });
+
       newText.value = "";
       selectedTag.value = "";
     };
@@ -106,17 +113,36 @@ export default {
       container.value.textWithTags.splice(index, 1);
     };
 
-    const submitForm = () => {
-      console.log("New container created:", container.value);
-      alert(`Container "${container.value.name}" created successfully!`);
-      // Reset the form
-      container.value = { name: "", body: "", textWithTags: [] };
+    const submitForm = async () => {
+      try {
+        const publicTypes = container.value.textWithTags.map((item) => ({
+          type_id: parseInt(item.tagId), // Используем ID тега
+          data: item.text,
+        }));
+
+        const requestData = {
+          name: container.value.name,
+          body: container.value.body,
+          public_types: publicTypes
+        }
+
+        await CreateContainer(requestData)
+        alert(`Container "${container.value.name}" created successfully!`);
+
+        container.value = { name: "", body: "", textWithTags: [] };
+      } catch (error) {
+        console.error("Failed to create container:", error);
+        alert("Error creating container. Please try again.");
+      }
     };
 
     const fetchTags = async () => {
       try {
         const tags = await GetAllTypes();
-        availableTags.value = tags.map((type) => type.Name);
+        availableTags.value = tags.map((tag) => ({
+          id: tag.ID,
+          name: tag.Name,
+        }));
       } catch (error) {
         console.error("Failed to fetch tags: ", error)
       }
