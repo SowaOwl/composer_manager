@@ -7,13 +7,13 @@ import (
 )
 
 type App struct {
-	ctx            context.Context
-	ComposeService *compose.ComposeService
+	ctx               context.Context
+	ComposeController *compose.ControllerImpl
 }
 
-func NewApp(composeService *compose.ComposeService) *App {
+func NewApp(composeController *compose.ControllerImpl) *App {
 	return &App{
-		ComposeService: composeService,
+		ComposeController: composeController,
 	}
 }
 
@@ -22,9 +22,16 @@ func (a *App) Startup(ctx context.Context) {
 }
 
 func (a *App) GetAllTypes() []model.PublicType {
-	return a.ComposeService.GetAllTypes()
+	return a.ComposeController.GetAllTypes()
 }
 
 func (a *App) GetAllContainers() []model.Container {
-	return a.ComposeService.GetAllContainers()
+	return a.ComposeController.GetAllContainers()
+}
+
+func (a *App) GenerateDockerCompose() {
+	err := a.ComposeController.GenerateDockerCompose()
+	if err != nil {
+		panic(err)
+	}
 }

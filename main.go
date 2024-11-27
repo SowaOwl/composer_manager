@@ -20,8 +20,9 @@ func main() {
 
 	repo := compose.NewGormComposeRepository(db)
 	composeService := compose.NewGormCompose(repo)
+	composeController := compose.NewController(composeService, repo)
 
-	app := backend.NewApp(composeService)
+	app := backend.NewApp(composeController)
 
 	err := wails.Run(&options.App{
 		Title:  "composer_vue",

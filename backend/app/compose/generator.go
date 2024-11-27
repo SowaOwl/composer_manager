@@ -7,31 +7,7 @@ import (
 	"strings"
 )
 
-type Service interface {
-	GetAllTypes() []model.PublicType
-	GetAllContainers() []model.Container
-	GenerateDockerCompose() error
-}
-
-type ComposeService struct {
-	repo Repository
-}
-
-func NewGormCompose(repo Repository) *ComposeService {
-	return &ComposeService{
-		repo: repo,
-	}
-}
-
-func (c ComposeService) GetAllTypes() []model.PublicType {
-	return c.repo.GetTypes()
-}
-
-func (c ComposeService) GetAllContainers() []model.Container {
-	return c.repo.GetContainers()
-}
-
-func (c ComposeService) GenerateDockerCompose() error {
+func generateComposeFile(containers []model.Container, types []model.PublicType, networks []model.Network) error {
 	file, err := os.Create("docker-compose.yml")
 	if err != nil {
 		return err
@@ -42,24 +18,27 @@ func (c ComposeService) GenerateDockerCompose() error {
 		return err
 	}
 
-	containers := c.repo.GetContainers()
-	types := c.repo.GetTypes()
-	err = c.writeServices(file, containers, types)
+	err = writeServices(file, containers, types)
+	if err != nil {
+		return err
+	}
 
-	networks := c.repo.GetNetworks()
-	err = c.writeNetworks(file, networks)
+	err = writeNetworks(file, networks)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
 
-func (c ComposeService) writeServices(file *os.File, containers []model.Container, types []model.PublicType) error {
+func writeServices(file *os.File, containers []model.Container, types []model.PublicType) error {
 	_, err := file.WriteString("services:\n")
 	if err != nil {
 		return err
 	}
 
 	for _, container := range containers {
-		replacedText, err := c.replaceText(container.Body, types, container)
+		replacedText, err := replaceText(container.Body, types, container, containers)
 		if err != nil {
 			return err
 		}
@@ -72,7 +51,7 @@ func (c ComposeService) writeServices(file *os.File, containers []model.Containe
 	return nil
 }
 
-func (c ComposeService) writeNetworks(file *os.File, networks []model.Network) error {
+func writeNetworks(file *os.File, networks []model.Network) error {
 	_, err := file.WriteString("networks:\n")
 	if err != nil {
 		return err
@@ -88,7 +67,7 @@ func (c ComposeService) writeNetworks(file *os.File, networks []model.Network) e
 	return nil
 }
 
-func (c ComposeService) replaceText(text string, types []model.PublicType, container model.Container) (string, error) {
+func replaceText(text string, types []model.PublicType, container model.Container, allContainers []model.Container) (string, error) {
 	replacedText := text
 
 	for _, containerType := range types {
@@ -100,14 +79,14 @@ func (c ComposeService) replaceText(text string, types []model.PublicType, conta
 				if containerType.IsTabulate {
 					textToReplace += "\n"
 				}
-				textToReplace += c.getTextDecoratorForBridge(containerType, data.Data)
+				textToReplace += getTextDecoratorForBridge(containerType, data.Data)
 				replacedText = strings.ReplaceAll(replacedText, find, textToReplace)
 			}
 		}
 
 		find = "{" + containerType.ManyName + "}"
 		if strings.Contains(replacedText, find) {
-			generatedText := c.generateText(containerType)
+			generatedText := generateText(containerType, allContainers)
 			replacedText = strings.ReplaceAll(replacedText, find, generatedText)
 		}
 	}
@@ -115,7 +94,7 @@ func (c ComposeService) replaceText(text string, types []model.PublicType, conta
 	return replacedText, nil
 }
 
-func (c ComposeService) getTextDecoratorForBridge(cType model.PublicType, text string) string {
+func getTextDecoratorForBridge(cType model.PublicType, text string) string {
 	switch cType.Name {
 	case "port":
 		return "\t\t\t - \"" + text + "\""
@@ -126,14 +105,13 @@ func (c ComposeService) getTextDecoratorForBridge(cType model.PublicType, text s
 	}
 }
 
-func (c ComposeService) generateText(cType model.PublicType) string {
+func generateText(cType model.PublicType, containers []model.Container) string {
 	generatedText := ""
 
-	containers := c.repo.GetContainers()
 	for _, container := range containers {
 		if data, ok := container.GetPublicDataByName(cType.Name); ok {
 			generatedText += "\n"
-			generatedText += c.getTextDecoratorForBridge(cType, data.Data)
+			generatedText += getTextDecoratorForBridge(cType, data.Data)
 		}
 	}
 
