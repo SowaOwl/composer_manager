@@ -2,7 +2,6 @@ package compose
 
 import (
 	"composer_vue/backend/app/model"
-	"composer_vue/backend/util/debug"
 	"os"
 	"strings"
 )
@@ -74,7 +73,6 @@ func replaceText(text string, types []model.PublicType, container model.Containe
 		find := "{" + containerType.Name + "}"
 		if strings.Contains(replacedText, find) {
 			if data, ok := container.GetPublicDataByName(containerType.Name); ok {
-				debug.JsonPrint(data)
 				textToReplace := ""
 				if containerType.IsTabulate {
 					textToReplace += "\n"

@@ -12,8 +12,11 @@ type Repository interface {
 	GetContainerByID(id int64) *model.Container
 	GetNetworkByID(id int64) *model.Network
 	GetTypeByID(id int64) *model.PublicType
+
 	CreateContainer(*model.Container) (*model.Container, error)
 	CreatePublicData(*model.PublicData) (*model.PublicData, error)
+
+	DeleteContainerByID(id int64) error
 }
 
 type GormRepository struct {
@@ -73,6 +76,11 @@ func (r *GormRepository) CreatePublicData(c *model.PublicData) (*model.PublicDat
 	if err := r.db.Create(&c).Error; err != nil {
 		return nil, err
 	}
-
 	return c, nil
+}
+
+func (r *GormRepository) DeleteContainerByID(id int64) error {
+	var container model.Container
+	r.db.First(&container, id)
+	return r.db.Delete(&container).Error
 }

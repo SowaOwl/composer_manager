@@ -12,6 +12,7 @@
           {{ container.status === 'running' ? 'Stop' : 'Start' }}
         </button>
         <button @click="editContainer(container)">Edit</button>
+        <button @click="deleteContainer(container)">Delete</button>
       </div>
     </div>
   </div>
@@ -19,7 +20,7 @@
 
 <script>
 import {onMounted, ref} from "vue";
-import {GetAllContainers} from "../../wailsjs/go/backend/App.js";
+import {GetAllContainers, DeleteContainer} from "../../wailsjs/go/backend/App.js";
 
 export default {
   name: "DockerContainers",
@@ -48,6 +49,16 @@ export default {
       alert(`Edit functionality for ${container.name}`);
     };
 
+    const deleteContainer = async (container) => {
+      try {
+        await DeleteContainer(container.id)
+        alert(`Container deleted successful ${container.Name}`)
+        await fetchContainers()
+      } catch (error) {
+        console.error("Error with delete container: ", error)
+      }
+    }
+
     onMounted(() => {
       fetchContainers()
     })
@@ -56,6 +67,7 @@ export default {
       containers,
       toggleContainer,
       editContainer,
+      deleteContainer,
     };
   },
 };

@@ -10,6 +10,7 @@ type Controller interface {
 	GetNetworkByID(id int) *model.Network
 	UpdateContainer(request UpdateContainerRequest) error
 	CreateContainer(request CreateContainerRequest) error
+	DeleteContainer(id int) error
 	GenerateDockerCompose() error
 }
 
@@ -51,4 +52,8 @@ func (c *ControllerImpl) CreateContainer(request CreateContainerRequest) error {
 
 func (c *ControllerImpl) GenerateDockerCompose() error {
 	return c.service.GenerateDockerCompose()
+}
+
+func (c *ControllerImpl) DeleteContainer(id int) error {
+	return c.repo.DeleteContainerByID(int64(id))
 }

@@ -1,7 +1,6 @@
 package model
 
 import (
-	"composer_vue/backend/util/debug"
 	"time"
 )
 
@@ -19,8 +18,6 @@ type Container struct {
 func (c *Container) GetPublicDataByName(name string) (PublicData, bool) {
 	for _, data := range c.PublicData {
 		if data.PublicType.Name == name {
-			debug.JsonPrint(data)
-			debug.JsonPrint(name)
 			return data, true
 		}
 	}

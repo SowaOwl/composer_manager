@@ -42,3 +42,10 @@ func (a *App) CreateContainer(request compose.CreateContainerRequest) {
 		panic(err)
 	}
 }
+
+func (a *App) DeleteContainer(id int) {
+	err := a.ComposeController.DeleteContainer(id)
+	if err != nil {
+		panic(err)
+	}
+}

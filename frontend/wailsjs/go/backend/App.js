@@ -6,6 +6,10 @@ export function CreateContainer(arg1) {
   return window['go']['backend']['App']['CreateContainer'](arg1);
 }
 
+export function DeleteContainer(arg1) {
+  return window['go']['backend']['App']['DeleteContainer'](arg1);
+}
+
 export function GenerateDockerCompose() {
   return window['go']['backend']['App']['GenerateDockerCompose']();
 }

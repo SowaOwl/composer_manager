@@ -11,4 +11,5 @@ type PublicData struct {
 	UpdatedAt    time.Time
 
 	PublicType PublicType `gorm:"foreignKey:PublicTypeID"`
+	Container  Container  `gorm:"constraint:OnDelete:CASCADE;foreignKey:ContainerID;references:ID"`
 }

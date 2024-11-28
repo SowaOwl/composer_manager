@@ -105,6 +105,7 @@ export namespace model {
 	    // Go type: time
 	    UpdatedAt: any;
 	    PublicType: PublicType;
+	    Container: Container;
 	
 	    static createFrom(source: any = {}) {
 	        return new PublicData(source);
@@ -119,6 +120,7 @@ export namespace model {
 	        this.CreatedAt = this.convertValues(source["CreatedAt"], null);
 	        this.UpdatedAt = this.convertValues(source["UpdatedAt"], null);
 	        this.PublicType = this.convertValues(source["PublicType"], PublicType);
+	        this.Container = this.convertValues(source["Container"], Container);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

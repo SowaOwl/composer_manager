@@ -2,7 +2,6 @@ package compose
 
 import (
 	"composer_vue/backend/app/model"
-	"composer_vue/backend/util/debug"
 )
 
 type Service interface {
@@ -43,8 +42,6 @@ func (c ComposeService) CreateContainer(request CreateContainerRequest) error {
 	if err != nil {
 		return err
 	}
-
-	debug.JsonPrint(request.PublicTypes)
 
 	for _, data := range request.PublicTypes {
 		_, err := c.repo.CreatePublicData(&model.PublicData{
