@@ -43,6 +43,13 @@ func (a *App) CreateContainer(request compose.CreateContainerRequest) {
 	}
 }
 
+func (a *App) CreateDataType(request compose.CreateDataTypeRequest) {
+	err := a.ComposeController.CreateDataType(request)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func (a *App) DeleteContainer(id int) {
 	err := a.ComposeController.DeleteContainer(id)
 	if err != nil {

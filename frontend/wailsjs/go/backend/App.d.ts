@@ -5,6 +5,8 @@ import {model} from '../models';
 
 export function CreateContainer(arg1:compose.CreateContainerRequest):Promise<void>;
 
+export function CreateDataType(arg1:compose.CreateDataTypeRequest):Promise<void>;
+
 export function DeleteContainer(arg1:number):Promise<void>;
 
 export function GenerateDockerCompose():Promise<void>;

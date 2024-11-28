@@ -6,6 +6,10 @@ export function CreateContainer(arg1) {
   return window['go']['backend']['App']['CreateContainer'](arg1);
 }
 
+export function CreateDataType(arg1) {
+  return window['go']['backend']['App']['CreateDataType'](arg1);
+}
+
 export function DeleteContainer(arg1) {
   return window['go']['backend']['App']['DeleteContainer'](arg1);
 }

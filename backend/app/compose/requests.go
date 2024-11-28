@@ -16,3 +16,9 @@ type createPublicType struct {
 	TypeID uint   `json:"type_id"`
 	Data   string `json:"data"`
 }
+
+type CreateDataTypeRequest struct {
+	Name       string `json:"name"`
+	ManyName   string `json:"many_name"`
+	IsTabulate bool   `json:"is_tabulate"`
+}

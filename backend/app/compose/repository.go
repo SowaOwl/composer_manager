@@ -15,6 +15,7 @@ type Repository interface {
 
 	CreateContainer(*model.Container) (*model.Container, error)
 	CreatePublicData(*model.PublicData) (*model.PublicData, error)
+	CreatePublicType(*model.PublicType) error
 
 	DeleteContainerByID(id int64) error
 }
@@ -77,6 +78,10 @@ func (r *GormRepository) CreatePublicData(c *model.PublicData) (*model.PublicDat
 		return nil, err
 	}
 	return c, nil
+}
+
+func (r *GormRepository) CreatePublicType(c *model.PublicType) error {
+	return r.db.Create(&c).Error
 }
 
 func (r *GormRepository) DeleteContainerByID(id int64) error {

@@ -48,6 +48,22 @@ export namespace compose {
 		    return a;
 		}
 	}
+	export class CreateDataTypeRequest {
+	    name: string;
+	    many_name: string;
+	    is_tabulate: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new CreateDataTypeRequest(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
+	        this.many_name = source["many_name"];
+	        this.is_tabulate = source["is_tabulate"];
+	    }
+	}
 
 }
 

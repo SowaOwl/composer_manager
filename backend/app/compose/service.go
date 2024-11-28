@@ -7,6 +7,7 @@ import (
 type Service interface {
 	GenerateDockerCompose() error
 	CreateContainer(request CreateContainerRequest) error
+	CreateDataType(request CreateDataTypeRequest) error
 }
 
 type ComposeService struct {
@@ -55,4 +56,14 @@ func (c ComposeService) CreateContainer(request CreateContainerRequest) error {
 	}
 
 	return nil
+}
+
+func (c ComposeService) CreateDataType(request CreateDataTypeRequest) error {
+	dataType := model.PublicType{
+		Name:       request.Name,
+		ManyName:   request.ManyName,
+		IsTabulate: request.IsTabulate,
+	}
+
+	return c.repo.CreatePublicType(&dataType)
 }

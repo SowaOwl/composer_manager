@@ -5,6 +5,7 @@
       <nav>
         <button @click="setPage('HomePage')">Home</button>
         <button @click="setPage('CreateContainerPage')">Create New Container</button>
+        <button @click="setPage('CreateDataType')">Create New Type</button>
       </nav>
     </header>
     <main>
@@ -20,11 +21,13 @@
 import {ref} from "vue";
 import HomePage from "./components/Main.vue";
 import CreateContainerPage from "./components/CreateContainer.vue";
+import CreateDataType from "./components/CreateDataType.vue";
 
 export default {
   components: {
     HomePage,
     CreateContainerPage,
+    CreateDataType
   },
   setup() {
     // Текущее состояние страницы
