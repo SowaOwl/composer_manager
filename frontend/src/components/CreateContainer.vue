@@ -15,14 +15,19 @@
       </div>
 
       <!-- Поле для тела -->
+      <!--      <div class="form-group">-->
+      <!--        <label for="body">Body:</label>-->
+      <!--        <textarea-->
+      <!--            id="body"-->
+      <!--            v-model="container.body"-->
+      <!--            placeholder="Enter container description"-->
+      <!--            required-->
+      <!--        ></textarea>-->
+      <!--      </div>-->
+
       <div class="form-group">
         <label for="body">Body:</label>
-        <textarea
-            id="body"
-            v-model="container.body"
-            placeholder="Enter container description"
-            required
-        ></textarea>
+        <div ref="editor" class="code-editor"></div>
       </div>
 
       <!-- Поле для добавления текстов с тегами -->
@@ -66,7 +71,7 @@
       </div>
 
       <!-- Кнопка создания контейнера -->
-      <button type="submit">Create Container</button>
+      <button id="create-btn" type="submit">Create Container</button>
     </form>
   </div>
 </template>
@@ -74,6 +79,11 @@
 <script>
 import {onMounted, ref} from "vue";
 import {GetAllTypes, CreateContainer} from "../../wailsjs/go/backend/App.js";
+
+import CodeMirror from 'codemirror';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/dracula.css';
+import 'codemirror/mode/yaml/yaml';
 
 export default {
   name: "CreateContainer",
@@ -88,6 +98,8 @@ export default {
 
     const newText = ref("");
     const selectedTag = ref("");
+
+    const editor = ref(null);
 
     const addTextWithTag = () => {
       if (!newText.value.trim() || !selectedTag.value) {
@@ -129,7 +141,7 @@ export default {
         await CreateContainer(requestData)
         alert(`Container "${container.value.name}" created successfully!`);
 
-        container.value = { name: "", body: "", textWithTags: [] };
+        container.value = {name: "", body: "", textWithTags: []};
       } catch (error) {
         console.error("Failed to create container:", error);
         alert("Error creating container. Please try again.");
@@ -150,6 +162,15 @@ export default {
 
     onMounted(() => {
       fetchTags();
+      new CodeMirror(editor.value, {
+        mode: 'YAML',
+        theme: 'dracula',
+        lineNumbers: true,
+      });
+
+      editor.on('change', () => {
+        container.value.body = editor.getValue();
+      });
     })
 
     return {
@@ -160,6 +181,7 @@ export default {
       addTextWithTag,
       removeTextWithTag,
       submitForm,
+      editor,
     };
   },
 };
@@ -196,7 +218,8 @@ label {
 
 input,
 textarea,
-select {
+select,
+.code-editor {
   width: 100%;
   padding: 10px;
   margin: 0;
@@ -302,6 +325,23 @@ button {
 }
 
 button:hover {
+  background: #45a049;
+}
+
+#create-btn {
+  width: 40vh;  /* Убираем 100% ширину */
+  padding: 8px 16px;  /* Меньше отступы */
+  background: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin: 0 auto;  /* Центрируем кнопку */
+  display: block;  /* Включаем блочный режим, чтобы использовать margin: auto */
+}
+
+#create-btn:hover {
   background: #45a049;
 }
 </style>

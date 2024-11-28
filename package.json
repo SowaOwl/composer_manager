@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "codemirror": "^5.65.18",
+    "codemirror-graphql": "^2.1.1"
+  }
+}
