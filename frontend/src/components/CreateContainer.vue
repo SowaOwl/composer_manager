@@ -100,6 +100,7 @@ export default {
     const selectedTag = ref("");
 
     const editor = ref(null);
+    const cmEditor = ref(null);
 
     const addTextWithTag = () => {
       if (!newText.value.trim() || !selectedTag.value) {
@@ -142,6 +143,7 @@ export default {
         alert(`Container "${container.value.name}" created successfully!`);
 
         container.value = {name: "", body: "", textWithTags: []};
+        cmEditor.value.setValue('');
       } catch (error) {
         console.error("Failed to create container:", error);
         alert("Error creating container. Please try again.");
@@ -162,14 +164,14 @@ export default {
 
     onMounted(() => {
       fetchTags();
-      new CodeMirror(editor.value, {
+      cmEditor.value = new CodeMirror(editor.value, {
         mode: 'YAML',
         theme: 'dracula',
         lineNumbers: true,
       });
 
-      editor.on('change', () => {
-        container.value.body = editor.getValue();
+      cmEditor.value.on('change', () => {
+        container.value.body = cmEditor.value.getValue();
       });
     })
 
