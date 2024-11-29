@@ -8,6 +8,7 @@ type Container struct {
 	ID         uint   `gorm:"primary_key"`
 	Name       string `gorm:"unique"`
 	Body       string `gorm:"type:text"`
+	IsActive   bool   `gorm:"default:true"`
 	ComposerID uint   `gorm:"index"`
 	CreatedAt  time.Time
 	UpdatedAt  time.Time

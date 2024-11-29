@@ -6,6 +6,7 @@ import (
 
 type Service interface {
 	GenerateDockerCompose() error
+	SwitchActive(containerId int) (bool, error)
 	CreateContainer(request CreateContainerRequest) error
 	CreateDataType(request CreateDataTypeRequest) error
 }
@@ -31,6 +32,22 @@ func (c ComposeService) GenerateDockerCompose() error {
 	}
 
 	return nil
+}
+
+func (c ComposeService) SwitchActive(containerId int) (bool, error) {
+	container := c.repo.GetContainerByID(int64(containerId))
+	if container.IsActive {
+		container.IsActive = false
+	} else {
+		container.IsActive = true
+	}
+
+	err := c.repo.UpdateContainer(container)
+	if err != nil {
+		return false, err
+	}
+
+	return container.IsActive, nil
 }
 
 func (c ComposeService) CreateContainer(request CreateContainerRequest) error {

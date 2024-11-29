@@ -25,3 +25,7 @@ export function GetAllContainers() {
 export function GetAllTypes() {
   return window['go']['backend']['App']['GetAllTypes']();
 }
+
+export function SwitchContainerActive(arg1) {
+  return window['go']['backend']['App']['SwitchContainerActive'](arg1);
+}

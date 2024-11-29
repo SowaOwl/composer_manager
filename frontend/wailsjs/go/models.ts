@@ -161,6 +161,7 @@ export namespace model {
 	    ID: number;
 	    Name: string;
 	    Body: string;
+	    IsActive: boolean;
 	    ComposerID: number;
 	    // Go type: time
 	    CreatedAt: any;
@@ -177,6 +178,7 @@ export namespace model {
 	        this.ID = source["ID"];
 	        this.Name = source["Name"];
 	        this.Body = source["Body"];
+	        this.IsActive = source["IsActive"];
 	        this.ComposerID = source["ComposerID"];
 	        this.CreatedAt = this.convertValues(source["CreatedAt"], null);
 	        this.UpdatedAt = this.convertValues(source["UpdatedAt"], null);

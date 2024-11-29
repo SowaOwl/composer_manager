@@ -17,6 +17,7 @@ type Controller interface {
 	DeleteContainer(id int) error
 
 	GenerateDockerCompose() error
+	SwitchContainerActive(id int) (bool, error)
 }
 
 type ControllerImpl struct {
@@ -65,4 +66,8 @@ func (c *ControllerImpl) GenerateDockerCompose() error {
 
 func (c *ControllerImpl) DeleteContainer(id int) error {
 	return c.repo.DeleteContainerByID(int64(id))
+}
+
+func (c *ControllerImpl) SwitchContainerActive(id int) (bool, error) {
+	return c.service.SwitchActive(id)
 }

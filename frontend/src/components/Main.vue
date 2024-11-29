@@ -9,7 +9,7 @@
       </div>
       <div class="actions">
         <button @click="toggleContainer(container)">
-          {{ container.status === 'running' ? 'Stop' : 'Start' }}
+          {{ container.status === 'active' ? 'Deactivate' : 'Activate' }}
         </button>
         <button @click="editContainer(container)">Edit</button>
         <button @click="deleteContainer(container)">Delete</button>
@@ -20,7 +20,7 @@
 
 <script>
 import {onMounted, ref} from "vue";
-import {GetAllContainers, DeleteContainer} from "../../wailsjs/go/backend/App.js";
+import {GetAllContainers, DeleteContainer, SwitchContainerActive} from "../../wailsjs/go/backend/App.js";
 
 export default {
   name: "DockerContainers",
@@ -30,19 +30,21 @@ export default {
     const fetchContainers = async () => {
       try {
         const response = await GetAllContainers();
+        console.log(response)
         containers.value = response.map((container) => ({
           id: container.ID,
           name: container.Name,
           body: "Test",
-          status: "stopped",
+          status: container.IsActive ? "active" : "disabled",
         }))
       } catch (error) {
         console.error("Error with fetch containers: ", error)
       }
     }
 
-    const toggleContainer = (container) => {
-      container.status = container.status === "running" ? "stopped" : "running";
+    const toggleContainer = async (container) => {
+      const containerStatus = await SwitchContainerActive(container.id);
+      container.status = containerStatus ? "active" : "disabled";
     };
 
     const editContainer = (container) => {
@@ -111,11 +113,11 @@ body {
   margin: 2px 0;
 }
 
-.info .running {
+.info .active {
   color: #4caf50;
 }
 
-.info .stopped {
+.info .disabled {
   color: #f44336;
 }
 

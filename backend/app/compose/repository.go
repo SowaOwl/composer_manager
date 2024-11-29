@@ -13,6 +13,8 @@ type Repository interface {
 	GetNetworkByID(id int64) *model.Network
 	GetTypeByID(id int64) *model.PublicType
 
+	UpdateContainer(*model.Container) error
+
 	CreateContainer(*model.Container) (*model.Container, error)
 	CreatePublicData(*model.PublicData) (*model.PublicData, error)
 	CreatePublicType(*model.PublicType) error
@@ -64,6 +66,10 @@ func (r *GormRepository) GetTypeByID(id int64) *model.PublicType {
 	var cType model.PublicType
 	r.db.First(&cType, id)
 	return &cType
+}
+
+func (r *GormRepository) UpdateContainer(c *model.Container) error {
+	return r.db.Save(c).Error
 }
 
 func (r *GormRepository) CreateContainer(c *model.Container) (*model.Container, error) {

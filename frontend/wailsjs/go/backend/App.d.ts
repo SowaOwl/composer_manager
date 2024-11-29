@@ -14,3 +14,5 @@ export function GenerateDockerCompose():Promise<void>;
 export function GetAllContainers():Promise<Array<model.Container>>;
 
 export function GetAllTypes():Promise<Array<model.PublicType>>;
+
+export function SwitchContainerActive(arg1:number):Promise<boolean>;

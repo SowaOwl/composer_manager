@@ -36,6 +36,15 @@ func (a *App) GenerateDockerCompose() {
 	}
 }
 
+func (a *App) SwitchContainerActive(id int) bool {
+	response, err := a.ComposeController.SwitchContainerActive(id)
+	if err != nil {
+		panic(err)
+	}
+
+	return response
+}
+
 func (a *App) CreateContainer(request compose.CreateContainerRequest) {
 	err := a.ComposeController.CreateContainer(request)
 	if err != nil {
