@@ -37,6 +37,10 @@ func writeServices(file *os.File, containers []model.Container, types []model.Pu
 	}
 
 	for _, container := range containers {
+		if !container.IsActive {
+			continue
+		}
+
 		replacedText, err := replaceText(container.Body, types, container, containers)
 		if err != nil {
 			return err
@@ -107,6 +111,9 @@ func generateText(cType model.PublicType, containers []model.Container) string {
 	generatedText := ""
 
 	for _, container := range containers {
+		if !container.IsActive {
+			continue
+		}
 		if data, ok := container.GetPublicDataByName(cType.Name); ok {
 			generatedText += "\n"
 			generatedText += getTextDecoratorForBridge(cType, data.Data)

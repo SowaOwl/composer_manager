@@ -1,6 +1,9 @@
 <template>
   <div class="container">
     <h1 class="title">Docker Containers</h1>
+
+    <button @click="generateDockerCompose" class="generate-button">Generate docker-compose.yml</button>
+
     <div v-for="container in containers" :key="container.id" class="card">
       <div class="info">
         <h2>{{ container.name }}</h2>
@@ -20,7 +23,7 @@
 
 <script>
 import {onMounted, ref} from "vue";
-import {GetAllContainers, DeleteContainer, SwitchContainerActive} from "../../wailsjs/go/backend/App.js";
+import {GetAllContainers, DeleteContainer, SwitchContainerActive, GenerateDockerCompose} from "../../wailsjs/go/backend/App.js";
 
 export default {
   name: "DockerContainers",
@@ -42,6 +45,11 @@ export default {
       }
     }
 
+    const generateDockerCompose = async () => {
+      await GenerateDockerCompose()
+      alert('Successful generationk')
+    }
+
     const toggleContainer = async (container) => {
       const containerStatus = await SwitchContainerActive(container.id);
       container.status = containerStatus ? "active" : "disabled";
@@ -54,7 +62,7 @@ export default {
     const deleteContainer = async (container) => {
       try {
         await DeleteContainer(container.id)
-        alert(`Container deleted successful ${container.Name}`)
+        alert(`Container deleted successful ${container.name}`)
         await fetchContainers()
       } catch (error) {
         console.error("Error with delete container: ", error)
@@ -70,6 +78,7 @@ export default {
       toggleContainer,
       editContainer,
       deleteContainer,
+      generateDockerCompose,
     };
   },
 };
@@ -135,4 +144,21 @@ body {
 .actions button:hover {
   background: #444;
 }
+
+.generate-button {
+  background: #dc6b26;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  margin: 10px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+  transition: background 0.3s;
+}
+
+.generate-button:hover {
+  background: #aa531e;
+}
+
 </style>

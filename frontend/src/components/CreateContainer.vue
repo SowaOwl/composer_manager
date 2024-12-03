@@ -14,17 +14,6 @@
         />
       </div>
 
-      <!-- Поле для тела -->
-      <!--      <div class="form-group">-->
-      <!--        <label for="body">Body:</label>-->
-      <!--        <textarea-->
-      <!--            id="body"-->
-      <!--            v-model="container.body"-->
-      <!--            placeholder="Enter container description"-->
-      <!--            required-->
-      <!--        ></textarea>-->
-      <!--      </div>-->
-
       <div class="form-group">
         <label for="body">Body:</label>
         <div ref="editor" class="code-editor"></div>
@@ -219,7 +208,6 @@ label {
 }
 
 input,
-textarea,
 select,
 .code-editor {
   width: 100%;
@@ -229,11 +217,6 @@ select,
   border-radius: 4px;
   background: #1e1e1e;
   color: #fff;
-}
-
-textarea {
-  height: 30vh;
-  resize: none;
 }
 
 .text-with-tag {
@@ -331,7 +314,7 @@ button:hover {
 }
 
 #create-btn {
-  width: 40vh;  /* Убираем 100% ширину */
+  width: 40vw;  /* Убираем 100% ширину */
   padding: 8px 16px;  /* Меньше отступы */
   background: #4caf50;
   color: #fff;
