@@ -99,9 +99,9 @@ func replaceText(text string, types []model.PublicType, container model.Containe
 func getTextDecoratorForBridge(cType model.PublicType, text string) string {
 	switch cType.Name {
 	case "port":
-		return "\t\t\t - \"" + text + "\""
+		return "       - \"" + text + "\""
 	case "volume":
-		return "\t\t\t - " + text + ""
+		return "       - " + text + ""
 	default:
 		return text
 	}

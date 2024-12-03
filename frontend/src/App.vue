@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import {ref} from "vue";
+import {provide, ref} from "vue";
 import HomePage from "./components/Main.vue";
 import CreateContainerPage from "./components/CreateContainer.vue";
 import CreateDataType from "./components/CreateDataType.vue";
@@ -37,6 +37,8 @@ export default {
     const setPage = (page) => {
       currentPage.value = page;
     };
+
+    provide("setPage", setPage)
 
     return {
       currentPage,

@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import {onMounted, ref} from "vue";
+import {inject, onMounted, ref} from "vue";
 import {GetAllTypes, CreateContainer} from "../../wailsjs/go/backend/App.js";
 
 import CodeMirror from 'codemirror';
@@ -82,6 +82,8 @@ export default {
       body: "",
       textWithTags: [], // Массив для текстов с тегами
     });
+
+    const setPage = inject("setPage")
 
     const availableTags = ref([]);
 
@@ -132,7 +134,9 @@ export default {
         alert(`Container "${container.value.name}" created successfully!`);
 
         container.value = {name: "", body: "", textWithTags: []};
-        cmEditor.value.setValue('');
+        cmEditor.value.setValue("");
+
+        setPage("HomePage");
       } catch (error) {
         console.error("Failed to create container:", error);
         alert("Error creating container. Please try again.");
