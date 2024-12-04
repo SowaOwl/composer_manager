@@ -9,7 +9,7 @@ type Container struct {
 	Name       string `gorm:"unique"`
 	Body       string `gorm:"type:text"`
 	IsActive   bool   `gorm:"default:true"`
-	ComposerID uint   `gorm:"index"`
+	ComposerID uint   `gorm:"index;default:1"` //Default 1 пока нет реализации разделения по composer
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 

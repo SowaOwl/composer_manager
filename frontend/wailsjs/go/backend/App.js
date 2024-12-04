@@ -26,6 +26,10 @@ export function GetAllTypes() {
   return window['go']['backend']['App']['GetAllTypes']();
 }
 
+export function GetContainerByID(arg1) {
+  return window['go']['backend']['App']['GetContainerByID'](arg1);
+}
+
 export function SwitchContainerActive(arg1) {
   return window['go']['backend']['App']['SwitchContainerActive'](arg1);
 }

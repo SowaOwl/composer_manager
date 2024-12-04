@@ -15,4 +15,6 @@ export function GetAllContainers():Promise<Array<model.Container>>;
 
 export function GetAllTypes():Promise<Array<model.PublicType>>;
 
+export function GetContainerByID(arg1:number):Promise<model.Container>;
+
 export function SwitchContainerActive(arg1:number):Promise<boolean>;

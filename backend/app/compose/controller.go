@@ -40,16 +40,16 @@ func (c *ControllerImpl) GetAllContainers() []model.Container {
 	return c.repo.GetContainers()
 }
 
-func (c *ControllerImpl) GetContainerByID(id int64) *model.Container {
-	return c.repo.GetContainerByID(id)
+func (c *ControllerImpl) GetContainerByID(id int) *model.Container {
+	return c.repo.GetContainerByID(int64(id))
 }
 
-func (c *ControllerImpl) GetTypeByID(id int64) *model.PublicType {
-	return c.repo.GetTypeByID(id)
+func (c *ControllerImpl) GetTypeByID(id int) *model.PublicType {
+	return c.repo.GetTypeByID(int64(id))
 }
 
-func (c *ControllerImpl) GetNetworkByID(id int64) *model.Network {
-	return c.repo.GetNetworkByID(id)
+func (c *ControllerImpl) GetNetworkByID(id int) *model.Network {
+	return c.repo.GetNetworkByID(int64(id))
 }
 
 func (c *ControllerImpl) CreateContainer(request CreateContainerRequest) error {

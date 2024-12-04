@@ -21,6 +21,10 @@ func (a *App) Startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
+func (a *App) GetContainerByID(id int) *model.Container {
+	return a.ComposeController.GetContainerByID(id)
+}
+
 func (a *App) GetAllTypes() []model.PublicType {
 	return a.ComposeController.GetAllTypes()
 }
