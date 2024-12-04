@@ -1,67 +1,7 @@
 <template>
   <div class="container">
     <h1 class="title">Create Docker Container</h1>
-    <form @submit.prevent="submitForm">
-      <!-- Поле для имени -->
-      <div class="form-group">
-        <label for="name">Name:</label>
-        <input
-            type="text"
-            id="name"
-            v-model="container.name"
-            placeholder="Enter container name"
-            required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="body">Body:</label>
-        <div ref="editor" class="code-editor"></div>
-      </div>
-
-      <!-- Поле для добавления текстов с тегами -->
-      <div class="form-group">
-        <label>Add Text with Tag:</label>
-        <div class="text-with-tag">
-
-          <select v-model="selectedTag">
-            <option disabled value="">Select a tag</option>
-            <option v-for="tag in availableTags" :key="tag.id" :value="tag.id">
-              {{ tag.name }}
-            </option>
-          </select>
-          <input
-              type="text"
-              v-model="newText"
-              placeholder="Enter text"
-          />
-          <button
-              type="button"
-              class="add-button"
-              @click="addTextWithTag"
-          >
-            +
-          </button>
-        </div>
-        <ul class="text-tag-list">
-          <transition-group name="list" tag="div">
-            <li v-for="(item, index) in container.textWithTags" :key="item.text + item.tag">
-              {{ item.tag }} - {{ item.text }}
-              <button
-                  type="button"
-                  class="delete-button"
-                  @click="removeTextWithTag(index)"
-              >
-                ✕
-              </button>
-            </li>
-          </transition-group>
-        </ul>
-      </div>
-
-      <!-- Кнопка создания контейнера -->
-      <button id="create-btn" type="submit">Create Container</button>
-    </form>
+    <ContainerForm :on-submit="submitForm" :available-tags="availableTags" :container="container"/>
   </div>
 </template>
 
@@ -73,9 +13,11 @@ import CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
 import 'codemirror/mode/yaml/yaml';
+import ContainerForm from "./ContainerForm.vue";
 
 export default {
   name: "CreateContainer",
+  components: {ContainerForm},
   setup() {
     const container = ref({
       name: "",
@@ -120,7 +62,7 @@ export default {
     const submitForm = async () => {
       try {
         const publicTypes = container.value.textWithTags.map((item) => ({
-          type_id: parseInt(item.tagId), // Используем ID тега
+          type_id: parseInt(item.tagId),
           data: item.text,
         }));
 
@@ -199,138 +141,5 @@ body {
 .title {
   text-align: center;
   margin-bottom: 20px;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-input,
-select,
-.code-editor {
-  width: 100%;
-  padding: 10px;
-  margin: 0;
-  border: none;
-  border-radius: 4px;
-  background: #1e1e1e;
-  color: #fff;
-}
-
-.text-with-tag {
-  display: flex;
-  gap: 10px;
-}
-
-.text-with-tag input {
-  flex: 2;
-}
-
-.text-with-tag select {
-  flex: 1;
-  color: #1b1513;
-}
-
-.add-button {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #4caf50;
-  color: #fff;
-  border: none;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.add-button:hover {
-  background: #45a049;
-}
-
-.text-tag-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 10px 0 0;
-}
-
-.text-tag-list li {
-  margin-bottom: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.delete-button {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #e74c3c;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s;
-}
-
-.delete-button:hover {
-  background: #c0392b;
-}
-
-/* Плавная анимация добавления */
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
-}
-
-.list-enter-from {
-  opacity: 0;
-  transform: translateY(20px); /* Появление снизу */
-}
-
-.list-leave-to {
-  opacity: 0;
-  transform: translateY(-20px); /* Уход вверх */
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  background: #4caf50;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-button:hover {
-  background: #45a049;
-}
-
-#create-btn {
-  width: 40vw;  /* Убираем 100% ширину */
-  padding: 8px 16px;  /* Меньше отступы */
-  background: #4caf50;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.3s;
-  margin: 0 auto;  /* Центрируем кнопку */
-  display: block;  /* Включаем блочный режим, чтобы использовать margin: auto */
-}
-
-#create-btn:hover {
-  background: #45a049;
 }
 </style>
