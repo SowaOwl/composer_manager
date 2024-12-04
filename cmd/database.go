@@ -13,6 +13,8 @@ func InitDB() *gorm.DB {
 		log.Fatal(err)
 	}
 
+	db.Exec("PRAGMA foreign_keys = ON")
+
 	err = db.AutoMigrate(
 		&model.Composer{},
 		&model.PublicType{},

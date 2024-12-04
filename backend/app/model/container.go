@@ -13,7 +13,7 @@ type Container struct {
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 
-	PublicData []PublicData `gorm:"foreignKey:ContainerID"`
+	PublicData []PublicData `gorm:"foreignKey:ContainerID;constraint:OnDelete:CASCADE"`
 }
 
 func (c *Container) GetPublicDataByName(name string) (PublicData, bool) {
